@@ -1,7 +1,7 @@
 require_relative "spec_helper"
 
 describe NB::Fiber do
-  before(:all) do
+  before
     @fiber = NB::Fiber.new {puts "I'm a new fiber"}
   end
 
@@ -17,7 +17,4 @@ describe NB::Fiber do
     @fiber[:y].should == nil
   end
 
-  after(:all) do
-    @fiber = nil
-  end
 end
