@@ -4,28 +4,6 @@ require File.expand_path(File.dirname(__FILE__)+'/fiber')
 
 module NeverBlock
 
-  @@reactors = {}
-
-  @@queue = Queue.new
-
-  @@thread_pool = []
-
-  20.times do
-    @@thread_pool << Thread.new do
-      loop do
-        io, method, params, fiber, reactor = *(@@queue.shift)
-				if fiber.alive?	
-					begin
-						result = io.__send__(method, *params)
-						reactor.next_tick{ fiber.resume(result) if fiber.alive? }					
-					rescue Exception => e
-						reactor.next_tick{ fiber.resume(e) if fiber.alive? }					
-					end
-				end
-      end
-    end
-  end
-
   def self.reactor
     @@reactors[Thread.current.object_id] ||= ::Reactor::Base.new
   end
@@ -43,11 +21,6 @@ module NeverBlock
     fiber = NB::Fiber.current
     NB.reactor.add_timer(time){fiber.resume}
     NB::Fiber.yield
-  end
-
-  def self.defer(io, action, args)
-    @@queue << [io, action, args, NB::Fiber.current, NB.reactor]
-    NB::Fiber.yield      
   end
 
 end
