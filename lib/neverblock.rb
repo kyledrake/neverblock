@@ -6,7 +6,7 @@ module NeverBlock
 
   # Checks if we should be working in a non-blocking mode
   def self.neverblocking?
-    NB::Fiber.respond_to?(:current) && NB::Fiber.current.respond_to?('[]') && NB::Fiber.current[:neverblock] && NB.reactor.running?
+    NB::Fiber.respond_to?(:current) && NB::Fiber.current.respond_to?('[]') && NB::Fiber.current[:neverblock] && NB.reactor.reactor_running?
   end
 
   # The given block will run its queries either in blocking or non-blocking
@@ -36,4 +36,5 @@ require_relative 'neverblock/core/system/system'
 
 require_relative 'neverblock/io/socket'
 
+require_relative 'neverblock/net/buffered_io'
 
