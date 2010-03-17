@@ -4,6 +4,8 @@ require File.expand_path(File.dirname(__FILE__)+'/fiber')
 
 module NeverBlock
 
+  @@reactors = {}
+
   def self.reactor
     @@reactors[Thread.current.object_id] ||= ::Reactor::Base.new
   end

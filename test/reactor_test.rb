@@ -1,11 +1,10 @@
-require 'minitest/unit'
+require_relative 'test_helper'
 
 MiniTest::Unit.autorun
 
 class NeverBlockReactorTest < MiniTest::Unit::TestCase
   def setup
     super
-    require '../lib/neverblock'    
     @reactor = NeverBlock.reactor
   end
 

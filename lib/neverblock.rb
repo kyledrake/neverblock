@@ -2,9 +2,6 @@
 # Copyright:: Copyright (c) 2008 eSpace, Inc.
 # License::   Distributes under the same terms as Ruby
 
-$:.unshift File.expand_path(File.dirname(__FILE__))
-
-
 module NeverBlock
 
   # Checks if we should be working in a non-blocking mode
@@ -29,6 +26,8 @@ end
 
 NB = NeverBlock
 
-require 'neverblock/core/reactor'
-require 'neverblock/core/fiber'
-require 'neverblock/core/pool'
+require_relative 'neverblock/core/reactor'
+require_relative 'neverblock/core/fiber'
+require_relative 'neverblock/core/pool'
+require_relative 'neverblock/system'
+require_relative 'neverblock/neverblock_io'

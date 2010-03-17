@@ -1,11 +1,10 @@
-require 'minitest/unit'
+require_relative 'test_helper'
 
 MiniTest::Unit.autorun
 
 class NeverBlockFiberTest < MiniTest::Unit::TestCase
   def setup
     super
-    require_relative '../lib/neverblock'
     @fiber = NeverBlock::Fiber.new{ x = NB::Fiber.yield 1 }
   end
 

@@ -1,4 +1,4 @@
-require 'minitest/unit'
+require_relative 'test_helper'
 
 MiniTest::Unit.autorun
 
@@ -20,7 +20,6 @@ class SocketTest < MiniTest::Unit::TestCase
     end
     sleep 0.5
     super
-    require_relative '../lib/io'
   end
 
   def test_tcpsocket_recv

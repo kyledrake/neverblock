@@ -1,13 +1,9 @@
-require 'minitest/unit'
+require_relative 'test_helper'
 
 MiniTest::Unit.autorun
 
 class SystemTest < MiniTest::Unit::TestCase
-  def setup
-    super
-    require_relative '../lib/system'
- 
-  end
+
   def test_sleep
     run_in_reactor do
       t = Time.now
