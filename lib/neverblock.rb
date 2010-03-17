@@ -30,9 +30,10 @@ require_relative 'neverblock/core/reactor'
 require_relative 'neverblock/core/fiber'
 require_relative 'neverblock/core/pool'
 
+require_relative 'neverblock/core/system/system'
+require_relative 'neverblock/core/system/timeout'
+
 
 require_relative 'neverblock/io/socket'
 
-require_relative 'neverblock/core/system/system'
-require_relative 'neverblock/core/system/timeout'
 
