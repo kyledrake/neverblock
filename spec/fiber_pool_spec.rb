@@ -1,8 +1,8 @@
 require_relative "spec_helper"
 
-describe NeverBlock::Pool::FiberPool do
+describe NeverBlock::FiberPool do
   before(:each) do
-    @fiber_pool = NeverBlock::Pool::FiberPool.new(10)
+    @fiber_pool = NeverBlock::FiberPool.new(10)
   end
 
   it "should have all fibers ready and an empty queue initially" do
