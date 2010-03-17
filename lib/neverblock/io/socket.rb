@@ -16,23 +16,23 @@ class BasicSocket < IO
 
   alias_method :recv_blocking, :recv
 
-	def recv_neverblock(*args)
-		res = ""
-		begin
+  def recv_neverblock(*args)
+    res = ""
+    begin
       old_flags = self.fcntl(Fcntl::F_GETFL, 0)
-			res << recv_nonblock(*args)
+      res << recv_nonblock(*args)
       self.fcntl(Fcntl::F_SETFL, old_flags)
-		rescue Errno::EWOULDBLOCK, Errno::EAGAIN, Errno::EINTR
+    rescue Errno::EWOULDBLOCK, Errno::EAGAIN, Errno::EINTR
       self.fcntl(Fcntl::F_SETFL, old_flags)
-  		NB.wait(:read, self)
-  		retry
-		end
-		res
+      NB.wait(:read, self)
+      retry
+    end
+    res
   end
 
-	def recv(*args)
-		if NB.neverblocking?
-			recv_neverblock(*args)
+  def recv(*args)
+    if NB.neverblocking?
+      recv_neverblock(*args)
     else
       recv_blocking(*args)
     end
@@ -42,14 +42,14 @@ end
 
 class Socket < BasicSocket
   
-	alias_method :connect_blocking, :connect
-	    
+  alias_method :connect_blocking, :connect
+      
   def connect_neverblock(server_sockaddr)
     begin
       connect_nonblock(server_sockaddr)
     rescue Errno::EINPROGRESS, Errno::EINTR, Errno::EALREADY, Errno::EWOULDBLOCK
       NB.wait(:write, self)
-			retry
+      retry
     rescue Errno::EISCONN
       # do nothing, we are good
     end
@@ -57,7 +57,7 @@ class Socket < BasicSocket
     
   def connect(server_sockaddr)
     if NB.neverblocking?
-	  	connect_neverblock(server_sockaddr)
+      connect_neverblock(server_sockaddr)
     else
       connect_blocking(server_sockaddr)
     end
@@ -68,7 +68,7 @@ end
 Object.send(:remove_const, :TCPSocket)
 
 class TCPSocket < Socket
-	def initialize(*args)
+  def initialize(*args)
     super(AF_INET, SOCK_STREAM, 0)
     self.connect(Socket.sockaddr_in(*(args.reverse)))
   end

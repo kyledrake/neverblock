@@ -6,9 +6,9 @@ module NeverBlock
   # Copyright:: Copyright (c) 2008 eSpace, Inc.
   # License::   Distributes under the same terms as Ruby
   #
-  #	A pool of initialized fibers
-  #	It does not grow in size or create transient fibers
-  #	It will queue code blocks when needed (if all its fibers are busy)
+  #  A pool of initialized fibers
+  #  It does not grow in size or create transient fibers
+  #  It will queue code blocks when needed (if all its fibers are busy)
   #
   # This class is particulary useful when you use the fibers 
   # to connect to evented back ends. It also does not generate
