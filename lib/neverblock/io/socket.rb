@@ -4,7 +4,8 @@
 
 require 'socket'
 require 'fcntl'
-require File.expand_path(File.dirname(__FILE__)+'/io')
+
+require_relative 'io'
 
 class BasicSocket < IO
 

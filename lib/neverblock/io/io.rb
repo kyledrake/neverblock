@@ -6,9 +6,7 @@ require 'fcntl'
 # Copyright:: Copyright (c) 2009 eSpace, Inc.
 # License::   Distributes under the same terms as Ruby
 
-$:.unshift 
 
-require File.expand_path(File.dirname(__FILE__)+'/../../neverblock')
 
 class IO
 
