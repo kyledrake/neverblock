@@ -5,7 +5,7 @@ MiniTest::Unit.autorun
 class SystemTest < MiniTest::Unit::TestCase
   def setup
     super
-    require '../lib/system'
+    require_relative '../lib/system'
  
   end
   def test_sleep
