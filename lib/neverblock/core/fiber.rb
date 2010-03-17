@@ -3,7 +3,7 @@
 # License::   Distributes under the same terms as Ruby
 
 require 'fiber'
-require File.expand_path(File.dirname(__FILE__)+'/../../never_block')
+require File.expand_path(File.dirname(__FILE__)+'/../../neverblock')
 
 class NeverBlock::Fiber < Fiber
 
