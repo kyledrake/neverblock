@@ -1,20 +1,53 @@
-require 'reactor'
+require 'eventmachine'
 require 'thread'
 require File.expand_path(File.dirname(__FILE__)+'/fiber')
 
 module NeverBlock
 
-  @@reactors = {}
+  module EMHandler
+    attr_accessor :read_fiber, :write_fiber
+
+    def notify_readable
+      @read_fiber.resume if @read_fiber
+    end
+
+    def notify_writeable
+      @write_fiber.resume if @write_fiber
+    end
+  end
+
+  @@readers = {}
+  @@writers = {}
 
   def self.reactor
-    @@reactors[Thread.current.object_id] ||= ::Reactor::Base.new
+    EM
   end
 
   def self.wait(mode, io)
     fiber = NB::Fiber.current
-    NB.reactor.attach(mode, io){fiber.resume}
+
+    meth, store = case mode
+    when :read
+      ["notify_readable", @@readers]
+    when :write
+      ["notify_writeable", @@writers]
+    else
+      raise "Invalid mode #{mode.inspect}"
+    end
+
+    handler = @@readers[io.fileno] || @writers[io.fileno] || EM.watch(io, EMHandler)
+    handler.send("#{mode.to_s}_fiber=", fiber)
+    handler.send("#{meth}=", true)
+    store[io.fileno] = handler
     NB::Fiber.yield
-    NB.reactor.detach(mode, io)
+    store.delete(io.fileno)
+    # Is another fiber waiting for the same IO?
+    if @@readers[io.fileno] || @writers[io.fileno]
+      handler.send("#{mode.to_s}_fiber=", nil)
+      handler.send("#{meth}=", false)
+    else
+      handler.detach
+    end
   end
 
   def self.sleep(time)
