@@ -68,5 +68,9 @@ module NeverBlock
     end
 
   end # FiberPool
+  
+  module Pool
+    FiberPool = NeverBlock::FiberPool
+  end
 end # NeverBlock
 
