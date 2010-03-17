@@ -1,5 +1,4 @@
-$:.unshift File.expand_path('..')
-require 'lib/neverblock'
+require_relative "spec_helper"
 
 describe NB::Fiber do
   before(:all) do
