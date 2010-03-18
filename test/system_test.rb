@@ -70,10 +70,13 @@ class SystemTest < MiniTest::Unit::TestCase
   protected
 
   def run_in_reactor(&block)
-    NB::Fiber.new do
-      NB.reactor.add_timer(0.1){block.call; NB.reactor.stop}
-    end.resume
-    NB.reactor.run
+    NB.reactor.run {
+      NB::Fiber.new do
+        NB.reactor.add_timer(0.1){block.call; NB.reactor.stop}
+      end.resume
+      
+    }
+    
   end
 
 end

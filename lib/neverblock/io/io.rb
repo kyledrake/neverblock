@@ -214,4 +214,8 @@ class IO
     !file? && NB.neverblocking?
   end  
 
+  def puts(str)
+    rb_syswrite(str + "\n")
+  end
+
 end

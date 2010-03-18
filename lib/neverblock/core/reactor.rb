@@ -5,19 +5,18 @@ require File.expand_path(File.dirname(__FILE__)+'/fiber')
 module NeverBlock
 
   module EMHandler
-    attr_accessor :read_fiber, :write_fiber
+    def initialize(fiber)
+      @fiber = fiber
+    end
 
     def notify_readable
-      @read_fiber.resume if @read_fiber
+      @fiber.resume if @fiber
     end
 
     def notify_writable
-      @write_fiber.resume if @write_fiber
+      @fiber.resume if @fiber
     end
   end
-
-  @@readers = {}
-  @@writers = {}
 
   def self.reactor
     EM
@@ -26,28 +25,25 @@ module NeverBlock
   def self.wait(mode, io)
     fiber = NB::Fiber.current
 
-    meth, store = case mode
+    meth = case mode
     when :read
-      ["notify_readable", @@readers]
+      "notify_readable"
     when :write
-      ["notify_writable", @@writers]
+      "notify_writable"
     else
       raise "Invalid mode #{mode.inspect}"
     end
 
-    handler = @@readers[io.fileno] || @@writers[io.fileno] || EM.watch(io, EMHandler)
-    handler.send("#{mode.to_s}_fiber=", fiber)
+    #puts "Waiting for #{mode.inspect}"
+
+    fd = io.respond_to?(:to_io) ? io.to_io : io
+
+    handler = EM.watch(fd, EMHandler, fiber)
     handler.send("#{meth}=", true)
-    store[io.fileno] = handler
+    fiber[:io] = handler
     NB::Fiber.yield
-    store.delete(io.fileno)
-    # Is another fiber waiting for the same IO?
-    if @@readers[io.fileno] || @@writers[io.fileno]
-      handler.send("#{mode.to_s}_fiber=", nil)
-      handler.send("#{meth}=", false)
-    else
-      handler.detach
-    end
+    handler.detach
+    fiber[:io] = nil
   end
 
   def self.sleep(time)
