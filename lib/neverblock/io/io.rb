@@ -215,7 +215,7 @@ class IO
   end  
 
   def puts(str)
-    rb_syswrite(str + "\n")
+    rb_syswrite(str.to_s + "\n")
   end
 
 end

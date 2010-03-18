@@ -8,9 +8,8 @@ module Timeout
   def timeout(time, klass=Timeout::Error, &block)
     return rb_timeout(time, klass,&block) unless NB.neverblocking?
 
-    if time <= 0
-      block.call
-      return
+    if time.nil? || time <= 0
+      return block.call
     end
 
     fiber = NB::Fiber.current
