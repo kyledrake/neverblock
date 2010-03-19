@@ -27,7 +27,13 @@ module NeverBlock
 
     # gives access to the currently free fibers
     attr_reader :fibers
-
+    
+    # ongoing work
+    attr_reader :busy_fibers
+    
+    # pending work
+    attr_reader :queue
+    
     # Prepare a list of fibers that are able to run different blocks of code
     # every time. Once a fiber is done with its block, it attempts to fetch
     # another one from the queue
