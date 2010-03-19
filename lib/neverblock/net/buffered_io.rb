@@ -12,20 +12,10 @@ module Net
       begin
         @rbuf << @io.read_nonblock(BUFSIZE)
       rescue IO::WaitReadable => e
-        if self.io.kind_of? OpenSSL::SSL::SSLSocket
-          io = self.io.io
-        else
-          io = self.io
-        end
-        NB.wait(:read,io)
+        NB.wait(:read, @io)
         retry
       rescue IO::WaitWritable => e
-        if self.io.kind_of? OpenSSL::SSL::SSLSocket
-          io = self.io.io
-        else
-          io = self.io
-        end
-        NB.wait(:write,io)
+        NB.wait(:write, @io)
         retry
       end
     end

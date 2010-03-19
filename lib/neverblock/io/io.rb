@@ -6,7 +6,19 @@ require 'fcntl'
 # Copyright:: Copyright (c) 2009 eSpace, Inc.
 # License::   Distributes under the same terms as Ruby
 
-
+class OpenSSL::SSL::SSLSocket
+  def connect
+    begin
+      connect_nonblock
+    rescue IO::WaitReadable => e
+      NB.wait(:read, self)
+      retry
+    rescue IO::WaitWritable => e
+      NB.wait(:write, self)
+      retry
+    end
+  end
+end
 
 class IO
 
@@ -216,6 +228,10 @@ class IO
 
   def puts(str)
     rb_syswrite(str.to_s + "\n")
+  end
+
+  def p(obj)
+    rb_syswrite(obj.inspect + "\n")
   end
 
 end

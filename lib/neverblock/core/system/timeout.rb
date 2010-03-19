@@ -20,8 +20,7 @@ module Timeout
       timers_to_cancel = timeouts.slice!(idx..timeouts.size-1)
       timers_to_cancel.each {|t| EM.cancel_timer(t) }
       handler = fiber[:io]
-      handler.detach if handler
-      fiber[:io] = nil
+      handler.remove_waiter(fiber) if handler
       fiber.resume(Timeout::Error.new)
     }    
 

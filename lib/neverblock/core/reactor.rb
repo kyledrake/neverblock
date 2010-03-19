@@ -5,45 +5,86 @@ require File.expand_path(File.dirname(__FILE__)+'/fiber')
 module NeverBlock
 
   module EMHandler
-    def initialize(fiber)
-      @fiber = fiber
+    def initialize(fd)
+      @fd = fd
+      @readers = []
+      @writers = []
+    end
+
+    def add_writer(fiber)
+      fiber[:io] = self
+      self.notify_writable = true
+      @writers << fiber
+    end
+
+    def add_reader(fiber)
+      fiber[:io] = self
+      self.notify_readable = true
+      @readers << fiber
+    end
+
+    def remove_waiter(fiber)
+      if f = @readers.delete(fiber)
+        f[:io] = nil
+      end
+      if f = @writers.delete(fiber)
+        f[:io] = nil
+      end
     end
 
     def notify_readable
-      @fiber.resume if @fiber
+      if f = @readers.shift
+        EM.many_ticks { f[:io] = nil; f.resume if f.alive? }
+      else
+        self.notify_readable = false
+      end
+      detach_if_done
     end
 
     def notify_writable
-      @fiber.resume if @fiber
+      if f = @writers.shift
+        EM.many_ticks { f[:io] = nil; f.resume if f.alive? }
+      else
+        self.notify_writable = false
+      end
+      detach_if_done
     end
+
+    def detach_if_done
+      NB.remove_handler(@fd) if @readers.empty? && @writers.empty?
+    end
+
   end
 
   def self.reactor
     EM
   end
 
+  @@handlers = {}
+
   def self.wait(mode, io)
     fiber = NB::Fiber.current
 
     meth = case mode
     when :read
-      "notify_readable"
+      :add_reader
     when :write
-      "notify_writable"
+      :add_writer
     else
       raise "Invalid mode #{mode.inspect}"
     end
 
-    #puts "Waiting for #{mode.inspect}"
-
     fd = io.respond_to?(:to_io) ? io.to_io : io
 
-    handler = EM.watch(fd, EMHandler, fiber)
-    handler.send("#{meth}=", true)
-    fiber[:io] = handler
+    handler = (@@handlers[fd.fileno] ||= EM.watch(fd, EMHandler, fd.fileno))
+    handler.send(meth, fiber)
     NB::Fiber.yield
-    handler.detach
-    fiber[:io] = nil
+  end
+
+  def self.remove_handler(fd)
+    if handler = @@handlers.delete(fd)
+      handler.detach
+    end
   end
 
   def self.sleep(time)
