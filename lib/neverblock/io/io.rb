@@ -200,6 +200,19 @@ class IO
     args.each{|element|syswrite(element)}
   end
 
+  def puts(str)
+    rb_syswrite(str.to_s + "\n")
+  end
+
+  def neverblock?
+    !file? && NB.neverblocking?
+  end  
+
+
+  def p(obj)
+    rb_syswrite(obj.inspect + "\n")
+  end
+
   protected
 
   def get_flags
@@ -222,16 +235,5 @@ class IO
     @file ||= self.stat.file?
   end
 
-  def neverblock?
-    !file? && NB.neverblocking?
-  end  
-
-  def puts(str)
-    rb_syswrite(str.to_s + "\n")
-  end
-
-  def p(obj)
-    rb_syswrite(obj.inspect + "\n")
-  end
 
 end
