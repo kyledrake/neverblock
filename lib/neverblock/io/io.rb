@@ -200,8 +200,8 @@ class IO
     args.each{|element|syswrite(element)}
   end
 
-  def puts(str)
-    rb_syswrite(str.to_s + "\n")
+  def puts(*args)
+    rb_syswrite(args.join("\n") + "\n")
   end
 
   def neverblock?
