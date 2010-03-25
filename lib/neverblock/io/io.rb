@@ -1,4 +1,5 @@
 require 'fcntl'
+require 'openssl'
 
 # This is an extention to the Ruby IO class that makes it compatable with
 #  NeverBlocks event loop to avoid blocking IO calls. That's done by delegating
