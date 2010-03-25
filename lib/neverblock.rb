@@ -38,5 +38,6 @@ require_relative 'neverblock/io/socket'
 
 require_relative 'neverblock/net/buffered_io'
 
+require_relative 'neverblock/many_ticks'
 require_relative 'neverblock/thin' if defined?(Thin)
 
