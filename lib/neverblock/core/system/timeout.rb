@@ -1,5 +1,4 @@
 require 'timeout'
-require File.expand_path(File.dirname(__FILE__)+'/../../../neverblock')
 
 module Timeout
 

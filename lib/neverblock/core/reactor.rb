@@ -1,6 +1,5 @@
 require 'eventmachine'
 require 'thread'
-require File.expand_path(File.dirname(__FILE__)+'/fiber')
 
 module NeverBlock
 

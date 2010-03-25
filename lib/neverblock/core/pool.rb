@@ -1,6 +1,3 @@
-
-require File.expand_path(File.dirname(__FILE__)+'/fiber')
-
 module NeverBlock
   # Author::    Mohammad A. Ali  (mailto:oldmoe@gmail.com)
   # Copyright:: Copyright (c) 2008 eSpace, Inc.

@@ -1,6 +1,3 @@
-
-require File.expand_path(File.dirname(__FILE__)+'/../../../neverblock')
-
 module Kernel
 
   alias_method :rb_sleep, :sleep
