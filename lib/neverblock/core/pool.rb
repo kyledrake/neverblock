@@ -38,7 +38,7 @@ module NeverBlock
     # every time. Once a fiber is done with its block, it attempts to fetch
     # another one from the queue
     def initialize(count = 50)
-      @fibers,@busy_fibers,@queue = [],{},[]
+      @fibers,@busy_fibers,@queue,@on_empty = [],{},[],[]
       count.times do |i|
         fiber = NB::Fiber.new do |block|
           loop do
@@ -49,6 +49,7 @@ module NeverBlock
               block = @queue.shift
             else
               @busy_fibers.delete(NB::Fiber.current.object_id)
+              @on_empty.shift.call while @on_empty.any?
               @fibers << NB::Fiber.current
               block = NB::Fiber.yield
             end
@@ -57,6 +58,11 @@ module NeverBlock
         fiber[:callbacks] = []
         @fibers << fiber
       end
+      
+    end
+
+    def on_empty(&blk)
+      @on_empty << blk
     end
 
     # If there is an available fiber use it, otherwise, leave it to linger
