@@ -11,7 +11,7 @@ module Net
       # todo: handle timeout
       begin
         @rbuf << @io.read_nonblock(BUFSIZE)
-      rescue IO::WaitReadable => e
+      rescue IO::WaitReadable, Errno::EAGAIN, Errno::EWOULDBLOCK, Errno::EINTR => e
         NB.wait(:read, @io)
         retry
       rescue IO::WaitWritable => e
