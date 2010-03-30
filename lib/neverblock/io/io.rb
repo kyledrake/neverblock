@@ -159,6 +159,7 @@ class IO
       break if (c = read(1)).nil?
       res << c
     end
+    return nil if res.empty?
     $_ = res
     res
   end
