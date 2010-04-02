@@ -46,7 +46,6 @@ module NeverBlock
               block = @queue.shift
             else
               @busy_fibers.delete(NB::Fiber.current.object_id)
-              @on_empty.shift.call while @on_empty.any?
               @fibers << NB::Fiber.current
               @on_empty.shift.call while @on_empty.any? && @busy_fibers.empty?
               block = NB::Fiber.yield
