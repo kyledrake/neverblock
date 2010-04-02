@@ -34,12 +34,19 @@ module NeverBlock
     # Prepare a list of fibers that are able to run different blocks of code
     # every time. Once a fiber is done with its block, it attempts to fetch
     # another one from the queue
-    def initialize(count = 50)
+    def initialize(count = 50, logger=nil)
       @fibers,@busy_fibers,@queue,@on_empty = [],{},[],[]
       count.times do |i|
         fiber = NB::Fiber.new do |block|
           loop do
-            block.call
+            begin
+              block.call
+            rescue => e
+              if logger && logger.respond_to?(:error)
+                logger.error("Exception caught in fiber pool: #{e.class.name}: #{e.message}")
+                logger.error("Backtrace: #{e.backtrace.join("\n")}")
+              end
+            end
             # callbacks are called in a reverse order, much like c++ destructor
             NB::Fiber.current[:callbacks].pop.call while NB::Fiber.current[:callbacks].length > 0
             unless @queue.empty?
