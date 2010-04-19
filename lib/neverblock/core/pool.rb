@@ -66,7 +66,11 @@ module NeverBlock
     end
 
     def on_empty(&blk)
-      @on_empty << blk
+      if @busy_fibers.empty?
+        blk.call
+      else
+        @on_empty << blk
+      end
     end
 
     # If there is an available fiber use it, otherwise, leave it to linger
