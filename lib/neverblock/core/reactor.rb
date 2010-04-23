@@ -23,17 +23,14 @@ module NeverBlock
     end
 
     def remove_waiter(fiber)
-      if f = @readers.delete(fiber)
-        f[:io] = nil
-      end
-      if f = @writers.delete(fiber)
-        f[:io] = nil
-      end
+      @readers.delete(fiber)
+      @writers.delete(fiber)
     end
 
     def notify_readable
       if f = @readers.shift
-        EM.many_ticks { f[:io] = nil; f.resume if f.alive? }
+        # if f[:io] is nil, it means it was cleared by a timeout - dont resume!
+        EM.many_ticks { f.resume if f.alive? && f[:io]; f[:io] = nil }
       else
         self.notify_readable = false
       end
@@ -42,7 +39,7 @@ module NeverBlock
 
     def notify_writable
       if f = @writers.shift
-        EM.many_ticks { f[:io] = nil; f.resume if f.alive? }
+        EM.many_ticks { f.resume if f.alive? && f[:io]; f[:io] = nil }
       else
         self.notify_writable = false
       end

@@ -18,10 +18,11 @@ module Timeout
       idx = timeouts.index(timer)
       timers_to_cancel = timeouts.slice!(idx..timeouts.size-1)
       timers_to_cancel.each {|t| EM.cancel_timer(t) }
-      handler = fiber[:io]
+      # remove fiber[:io] - this indicates to the many_ticks block not to resume!
+      handler = fiber.delete(:io)
       handler.remove_waiter(fiber) if handler
       fiber.resume(Timeout::Error.new)
-    }    
+    }
 
     timeouts << timer
 
