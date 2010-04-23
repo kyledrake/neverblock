@@ -47,8 +47,6 @@ module NeverBlock
                 logger.error("Backtrace: #{e.backtrace.join("\n")}")
               end
             end
-            # callbacks are called in a reverse order, much like c++ destructor
-            NB::Fiber.current[:callbacks].pop.call while NB::Fiber.current[:callbacks].length > 0
             unless @queue.empty?
               block = @queue.shift
             else
@@ -59,7 +57,6 @@ module NeverBlock
             end
           end
         end
-        fiber[:callbacks] = []
         @fibers << fiber
       end
       
@@ -77,7 +74,6 @@ module NeverBlock
     # in a queue
     def spawn(evented = true, &block)
       if fiber = @fibers.shift
-        fiber[:callbacks] = []
         @busy_fibers[fiber.object_id] = fiber
         fiber[:neverblock] = evented
         fiber.resume(block)
