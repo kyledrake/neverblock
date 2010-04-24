@@ -27,8 +27,10 @@ module Timeout
 
     timeouts << timer
 
+    ret = nil
+
     begin
-      block.call
+      ret = block.call
     rescue Exception => e
       raise e
     ensure
@@ -36,6 +38,7 @@ module Timeout
       EM.cancel_timer(timer)
     end
 
+    ret
   end
   
   module_function :timeout  
