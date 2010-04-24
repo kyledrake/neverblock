@@ -30,7 +30,14 @@ module NeverBlock
     def notify_readable
       if f = @readers.shift
         # if f[:io] is nil, it means it was cleared by a timeout - dont resume!
-        EM.many_ticks { f.resume if f.alive? && f[:io]; f[:io] = nil }
+        # make sure to set f[:io] to nil BEFORE resuming. if we set it after,
+        # we'll clear any new value that was set during fiber.resume
+        EM.many_ticks {
+          if f[:io]
+            f[:io] = nil
+            f.resume
+          end
+        }
       else
         self.notify_readable = false
       end
@@ -39,7 +46,12 @@ module NeverBlock
 
     def notify_writable
       if f = @writers.shift
-        EM.many_ticks { f.resume if f.alive? && f[:io]; f[:io] = nil }
+        EM.many_ticks {
+          if f[:io]
+            f[:io] = nil
+            f.resume
+          end
+        }
       else
         self.notify_writable = false
       end
