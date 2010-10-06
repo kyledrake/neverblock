@@ -16,20 +16,13 @@ Gem::Specification.new do |s|
                 "lib/neverblock/core/pool.rb",
                 "lib/neverblock/core/system/system.rb",
                 "lib/neverblock/core/system/timeout.rb",
-                "lib/neverblock/io/db/pool.rb",
-                "lib/neverblock/io/db/drivers/mysql.rb",
-                "lib/neverblock/io/db/drivers/postgres.rb",
-                "lib/neverblock/io/db/connection.rb",
-                "lib/neverblock/io/db/fibered_connection_pool.rb",
-                "lib/neverblock/io/db/fibered_mysql_connection.rb",
-                "lib/neverblock/io/file.rb",
                 "lib/neverblock/io/socket.rb",
                 "lib/neverblock/io/io.rb",
-                "lib/system.rb",
+                "lib/neverblock/net/buffered_io.rb",
+                "lib/neverblock/many_ticks.rb",
+                "lib/neverblock/thin.rb",
                 "lib/neverblock.rb",
                 "lib/never_block.rb",
-                "lib/neverblock_io.rb"
-
   ]
   s.rdoc_options = ["--main", "README"]
   s.extra_rdoc_files = ["README"]
