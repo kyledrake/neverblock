@@ -4,7 +4,7 @@ Gem::Specification.new do |s|
   s.date     = "2009-07-16"
   s.summary  = "Utilities for non-blocking stack components"
   s.email    = "oldmoe@gmail.com"
-  s.homepage = "http://github.com/oldmoe/neverblock"
+  s.homepage = "http://github.com/careo/neverblock"
   s.description = "NeverBlock is a collection of classes and modules that help you write evented non-blocking applications in a seemingly blocking mannner."
   s.has_rdoc = true
   s.authors  = ["Muhammad A. Ali", "Ahmed Sobhi", "Osama Brekaa"]
@@ -26,7 +26,7 @@ Gem::Specification.new do |s|
   ]
   s.rdoc_options = ["--main", "README"]
   s.extra_rdoc_files = ["README"]
-  s.add_dependency('reactor', '>= 0.2.3')
+  s.add_dependency('eventmachine', '>= 0.12.10')
 end
 
 
