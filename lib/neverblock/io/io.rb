@@ -147,6 +147,7 @@ class IO
   def write(data)
     return 0 if data.to_s.empty?
     return rb_write(data) if self.file?
+    return rb_write(data) if self == STDOUT
     syswrite(data)
   end 
   
