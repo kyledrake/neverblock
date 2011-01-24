@@ -31,11 +31,14 @@ module NeverBlock
     # pending work
     attr_reader :queue
     
+    # full pool, doesn't change
+    attr_reader :pool
+    
     # Prepare a list of fibers that are able to run different blocks of code
     # every time. Once a fiber is done with its block, it attempts to fetch
     # another one from the queue
     def initialize(count = 50, logger=nil)
-      @fibers,@busy_fibers,@queue,@on_empty = [],{},[],[]
+      @fibers,@busy_fibers,@queue,@on_empty,@pool = [],{},[],[],[]
       count.times do |i|
         fiber = NB::Fiber.new do |block|
           loop do
@@ -58,6 +61,7 @@ module NeverBlock
           end
         end
         @fibers << fiber
+        @pool << fiber
       end
       
     end
