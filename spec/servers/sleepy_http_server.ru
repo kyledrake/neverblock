@@ -9,7 +9,7 @@ class AsyncTest < Sinatra::Base
   aget "/hi" do
     body { "hello" }
   end
-    
+
   aget '/:n' do |n|
     EM.add_timer(n.to_i) { body { "delayed for #{n} seconds\n" } }
   end

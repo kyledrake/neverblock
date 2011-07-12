@@ -97,7 +97,7 @@ module NeverBlock
 
   def self.sleep(time)
     NB::Fiber.yield if time.nil?
-    return if time <= 0 
+    return if time <= 0
     fiber = NB::Fiber.current
     NB.reactor.add_timer(time){fiber.resume}
     NB::Fiber.yield

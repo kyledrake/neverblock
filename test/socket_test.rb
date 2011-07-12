@@ -8,7 +8,7 @@ class SocketTest < MiniTest::Unit::TestCase
       require 'socket'
       @server = TCPServer.new('0.0.0.0', 8080)
       STDERR.puts "server started"
-      
+
       loop do
         conn = @server.accept
         STDERR.puts "after server accept"
@@ -28,7 +28,7 @@ class SocketTest < MiniTest::Unit::TestCase
       s.send('helloU', Socket::MSG_OOB)
       s.close
     end
-  end  
+  end
 
   protected
 

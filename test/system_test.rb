@@ -29,7 +29,7 @@ class SystemTest < MiniTest::Unit::TestCase
   def test_timed_out
     run_in_reactor do
       t = Time.now
-      assert_raises(Timeout::Error) do 
+      assert_raises(Timeout::Error) do
         Timeout::timeout(1) do
           sleep(2)
           #raise Timeout::Error
@@ -55,7 +55,7 @@ class SystemTest < MiniTest::Unit::TestCase
   def test_nested_timeouts_raise_exception
     run_in_reactor do
       t = Time.now
-      assert_raises(Timeout::Error) do 
+      assert_raises(Timeout::Error) do
         Timeout::timeout(1) do
           Timeout::timeout(1) do
             sleep(2)
@@ -74,10 +74,8 @@ class SystemTest < MiniTest::Unit::TestCase
       NB::Fiber.new do
         NB.reactor.add_timer(0.1){block.call; NB.reactor.stop}
       end.resume
-      
     }
-    
+
   end
 
 end
-

@@ -27,7 +27,4 @@ class NeverBlockReactorTest < MiniTest::Unit::TestCase
 
 end
 
-
-
 # test that NeverBlock.reactor returns a reactor object
-

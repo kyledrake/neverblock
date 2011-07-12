@@ -25,11 +25,11 @@ module Kernel
   def backticks(cmd, *args)
     myargs = "#{cmd} "
     myargs << args.join(' ') if args
-    res = ''    
+    res = ''
     IO.popen(myargs) do |f|
       res << f.read
     end
     res
   end
-  
+
 end

@@ -56,4 +56,3 @@ describe NeverBlock::FiberPool do
   end
 
 end
-

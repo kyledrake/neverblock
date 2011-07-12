@@ -23,9 +23,6 @@ trap "INT" do
 end
 
 EventMachine::run {
-  
   EventMachine::start_server "localhost", 8080, EchoServer
-  
 #  EM.add_timer(1) { EM.stop }
-
 }

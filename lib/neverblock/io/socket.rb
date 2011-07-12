@@ -41,9 +41,9 @@ class BasicSocket < IO
 end
 
 class Socket < BasicSocket
-  
+
   alias_method :connect_blocking, :connect
-      
+
   def connect_neverblock(server_sockaddr)
     begin
       connect_nonblock(server_sockaddr)
@@ -54,7 +54,7 @@ class Socket < BasicSocket
       # do nothing, we are good
     end
   end
-    
+
   def connect(server_sockaddr)
     if NB.neverblocking?
       connect_neverblock(server_sockaddr)
@@ -73,4 +73,3 @@ class TCPSocket < Socket
     self.connect(Socket.sockaddr_in(*(args.reverse)))
   end
 end
-

@@ -16,7 +16,7 @@
 #      resp = http.request(get)
 #      resp.body.should == "hello"
 #    end
-#    
+#
 #  end
 #
 #  context " with NeverBlock" do
@@ -47,10 +47,10 @@
 #        (Time.now - start).should <= 1.5
 #        EM.add_timer(0.1) { EM.stop }
 #      }
-#      
+#
 #    end
-#    
-#    
+#
+#
 #
 #  end
 #

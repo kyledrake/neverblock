@@ -4,7 +4,6 @@ EM.error_handler {|e| $stderr.puts(e.message); $stderr.puts(e.backtrace.join("\n
 
 class TestServer
 
-  
   def initialize server
     path = File.expand_path("../servers/#{server}.rb",__FILE__)
     @pid = spawn("ruby #{path}")
@@ -16,9 +15,7 @@ class TestServer
 
 end
 
-
 class TestHTTPServer
-
 
   def initialize server
     path = File.expand_path("../servers/#{server}",__FILE__)
@@ -29,8 +26,4 @@ class TestHTTPServer
     Process.kill "KILL", @pid
   end
 
-  
-
-
 end
-

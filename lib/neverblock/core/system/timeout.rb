@@ -40,13 +40,8 @@ module Timeout
 
     ret
   end
-  
-  module_function :timeout  
-  module_function :rb_timeout  
+
+  module_function :timeout
+  module_function :rb_timeout
 
 end
-
-
-
-
-

@@ -7,16 +7,16 @@ module NeverBlock
   #  It does not grow in size or create transient fibers
   #  It will queue code blocks when needed (if all its fibers are busy)
   #
-  # This class is particulary useful when you use the fibers 
+  # This class is particulary useful when you use the fibers
   # to connect to evented back ends. It also does not generate
   # transient objects and thus saves memory.
   #
   # Example:
   # fiber_pool = NeverBlock::FiberPool.new(150)
-  # 
+  #
   # loop do
   #   fiber_pool.spawn do
-  #     #fiber body goes here 
+  #     #fiber body goes here
   #   end
   # end
   #
@@ -24,16 +24,16 @@ module NeverBlock
 
     # gives access to the currently free fibers
     attr_reader :fibers
-    
+
     # ongoing work
     attr_reader :busy_fibers
-    
+
     # pending work
     attr_reader :queue
-    
+
     # full pool, doesn't change
     attr_reader :pool
-    
+
     # Prepare a list of fibers that are able to run different blocks of code
     # every time. Once a fiber is done with its block, it attempts to fetch
     # another one from the queue
@@ -63,7 +63,7 @@ module NeverBlock
         @fibers << fiber
         @pool << fiber
       end
-      
+
     end
 
     def on_empty(&blk)
@@ -88,9 +88,8 @@ module NeverBlock
     end
 
   end # FiberPool
-  
+
   module Pool
     FiberPool = NeverBlock::FiberPool
   end
 end # NeverBlock
-

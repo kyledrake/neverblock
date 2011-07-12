@@ -13,7 +13,7 @@ describe TCPSocket, " without NeverBlock" do
     @socket.write "test"
     @socket.read(4).should == "test"
   end
-  
+
   it "should not be mad concurrent" do
     start = Time.now
     20.times do
@@ -28,7 +28,7 @@ describe TCPSocket, " without NeverBlock" do
   after(:all) do
     @server.stop
   end
-  
+
 end
 
 describe TCPSocket, " with NeverBlock" do
@@ -49,11 +49,11 @@ describe TCPSocket, " with NeverBlock" do
       EM.add_timer(0.1) { EM.stop }
     }
   end
-  
+
   it "should be mad concurrent" do
     EM.run {
       start = Time.now
-      10.times do 
+      10.times do
         NB::Fiber.new do
           socket = TCPSocket.new "localhost", 8080
           socket.read(2).should == "hi"
@@ -63,8 +63,8 @@ describe TCPSocket, " with NeverBlock" do
         end.resume
       end
 
-      EM.add_timer(0.5) { 
-        EM.stop 
+      EM.add_timer(0.5) {
+        EM.stop
       }
     }
   end
@@ -73,5 +73,5 @@ describe TCPSocket, " with NeverBlock" do
   after(:all) do
     @server.stop
   end
-  
+
 end
